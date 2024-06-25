@@ -1,42 +1,15 @@
 import { useContext, useEffect } from 'react';
 import Button from '../../components/Button'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { FormContext } from '../../context/FormContext';
 import InputField from '../../components/Login/InputField';
 import SignupBoard from "../../components/Login/SignupBoard";
 import HomePage from '../login';
 // import { func } from 'prop-types';
 import Date from '../../components/Login/DatePicker';
+import Toast from '../../components/homefeed/Toast'
 
-
-// function LoginStep() {
-
-//     const navigate = useNavigate()
-  
-//     return (
-//     <>
-//       <div className="flex py-3 px-0 items-center gap-5 self-stretch">
-//           <svg onClick={() => navigate("/")} xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none">
-//             <path d="M18 6L6 18" stroke="#F9F9F9" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-//             <path d="M6 6L18 18" stroke="#F9F9F9" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-//           </svg>
-//         <p className="text-neutral-50 text-base not-italic font-bold leading-normal">Step 1 of 4</p>
-//       </div>
-
-//     </>
-//     )
-  
-// }
-
-function Header() {
-
-return(
-  <>
-    <h1 className="text-neutral-900 w-60 h-7 font-px-regular text-2xl not-italic font-bold leading-normal">Create your account</h1>
-  </>
-)
-}
 
 
 function Form() {
@@ -49,19 +22,24 @@ function Form() {
     year: 2006
   };
   const {formData, setFormData} = useContext(FormContext);
-  const [user, setUser] = useState(initialValues);
+  // const [user, setUser] = useState(initialValues);
   // const [userError, setUserError] = useState({});
   // const [isSubmit, setIsSubmit] = useState(false)
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setUser({...user, [name] : value})
-    console.log(user)
+    const {name, value} =  e.target;
+    setFormData({...formData, [name] : value})
+    console.log(formData)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setUserError(validate(user));
+  // const accountCreated = async () => {
+  //   await setTimeout(<Toast text={'Account has been successfully created'}/>, 2000  )
+  //   (!disabled) ? navigate("/login2"): navigate('/login1')
+  // }
+
+  const handleSubmit = async (e) => {
+    await e.preventDefault()
+    setUserError(validate(formData));
     setIsSubmit(true)
   }
 
@@ -92,13 +70,19 @@ function Form() {
         <form className="flex flex-col items-center justify-center gap-8 self-stretch" 
         onSubmit={(e) => {
           e.preventDefault();
-          setFormData({...formData, ...user})
-          console.log(user)
+          setFormData({...formData})
+          if (!formData.username || !formData.email) {
+           
+            console.log('Fill in the details.')
+              
+          } 
+          console.log(formData)
           navigate("/login2")
-        }} autoComplete='off'  >
+        }} 
+        autoComplete='off'  >
             <SignupBoard stepNum={1} header={"Create your account"} w={'lg'} h={'lg'} navigateTo={"/"} > 
-                <InputField legend={'Name'} placeholder={'Name'} name={'username'} type={"text"} value={user.username} onChange={handleChange}/>
-                <InputField legend={'Email'} placeholder={'Email'} name={'email'} type={"email"} value={user.email} onChange={handleChange}/>
+                <InputField legend={'Name'} placeholder={'Name'} name={'username'} type={"text"} value={formData.username} onChange={handleChange}/>
+                <InputField legend={'Email'} placeholder={'Email'} name={'email'} type={"email"} value={formData.email} onChange={handleChange}/>
               
                 <div className="flex flex-col items-start gap-2 self-stretch">
                     <div className="text-neutral-50 text-base not-italic font-bold leading-normal">Date of birth</div>
@@ -107,15 +91,17 @@ function Form() {
                     </p>
                 </div>
                 
-                <Date handleInputChange={handleChange}  />
+                <Date handleInputChange={handleChange} />
 
                 <footer className="flex flex-col mt-6 justify-center justify-items-center items-center place-content-center gap-5 self-stretch">
                   <a>
-                    <Button size='md' variant='default' wh="medium" disabled={!user.username || !user.email} >Create Account</Button>
+                    <Button size='md' variant='default' wh="medium" disabled={(!formData.username || !formData.email )} onSubmit={()=> <Toast/>}
+                     >Create Account</Button>
                   </a>
                 </footer>
-
+              
             </SignupBoard >
+            
 
         </form>
     </div>
@@ -129,7 +115,7 @@ function Login1() {
   return (
     <>
      
-      <div className="bg-100x h-fit pt-10 pb-[87px] px-4 gap-3 flex flex-col items-center justify-center shrink-0 ">
+      <div className="lg:bg-100x md:bg-100x bg-neutral-1000 h-screen pt-10 lg:pb-[87px] md:pb-[87px] px-4 gap-3 flex flex-col items-center justify-center shrink-0 ">
           {/* <LoginStep  /> */}
           <div className="my-3 flex flex-col items-center justify-center gap-5 self-stretch">
             {/* <Header/> */}

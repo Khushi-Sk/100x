@@ -2,22 +2,37 @@ import { useNavigate } from "react-router-dom"
 import Button from "../../components/Button"
 import SignupBoard from "../../components/Login/SignupBoard"
 import InputField from "../../components/Login/InputField"
+import { useContext, useState } from "react"
+import { FormContext } from "../../context/FormContext"
 
 function Login3() {
 
+    const [verified, setVerified] = useState(false)
     const navigate = useNavigate()
+    const user  = useContext(FormContext)
+    const formValues = user.formData
+    console.log(formValues)
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        if (!verified) {
+            setVerified(false)
+        }
+        navigate("/login4")
+    }
 
     return (
       <>
 
-        <div className="bg-100x flex w-screen h-screen pt-0 pb-5 px-16 gap-3 flex-col items-start shrink-0">
+        <div className="lg:bg-100x md:bg-100x bg-neutral-1000 flex w-screen h-screen pt-0 pb-5 px-16 gap-3 flex-col items-start shrink-0">
 
+        <form className="flex justify-center items-center mx-96" onSubmit={handleSubmit}>
             <div className="flex my-3 py-24 px-0 items-center justify-center gap-5 self-stretch">
                 <SignupBoard  stepNum={3} header={"We sent you a code"} w={'lg'} h={'md'} navigateTo={"/login2"} >
                     <div className="flex flex-col items-start self-stretch gap-10">
                         {/* <div className="flex flex-col items-start  self-stretch gap-3"> */}
                             <div className="flex flex-col items-start self-stretch gap-3">
-                                <p className="text-neutral-500 font-normal text-base not-italic leading-normal">Enter it below to verify janedoe@gmail.com</p>
+                                <p className="text-neutral-500 font-normal text-base not-italic leading-normal">Enter it below to verify your 
+                                <br/> Email: {formValues.email}</p>
                             </div>
                         {/* </div> */}
 
@@ -28,13 +43,15 @@ function Login3() {
                         </div>
 
                         <footer className="mt-20 flex flex-col justify-end items-center self-stretch gap-5">
-                            <div className="mt-16 flex justify-center items-center">
-                                <Button variant='default' size='md' wh='long' onClick={() => navigate("/login4")} >Next</Button>
+                            <div className="mt-10 flex justify-center items-center">
+                                <Button variant='default' size='md' wh='long' >Next</Button>
                             </div>
                         </footer>
                     </div>
                 </SignupBoard>
             </div>
+        </form>
+            
             
         </div>
       </>

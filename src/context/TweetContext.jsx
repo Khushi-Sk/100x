@@ -4,7 +4,7 @@ export const TweetContext = React.createContext()
 
 const tweetData = [{
     id :6,
-    name: 'khushi sukar',
+    username: 'khushi sukar',
     handle:'khushisukar',
     postedAt: '3h',
     tweetText: "All is well",
@@ -16,9 +16,9 @@ const tweetData = [{
     isRetweeted: false
 ,
     id :2,
-    name: 'khushi sukar',
+    username: 'khushi sukar',
     handle:'khushisukar',
-    postedAt: 133242120,
+    postedAt: 1211111,
     tweetText: "I'm not addicted to coffee. It's just my way of life",
     comments: 0,
     likes: 0,
@@ -31,8 +31,20 @@ const tweetData = [{
 
 export function TweetProvider({ children }) {
 
-    const [userTweets, setUserTweets] = useState(tweetData)
-
+    const [userTweets, setUserTweets] = useState([{
+        // username: 'User',
+        // handle:'user_handle',
+        postedAt: 1711992900111,
+        tweetText: "Hey Tweet Buddies!",
+        // comments: 0,
+        // likes: 0,
+        // retweets: 0,
+        // views: 0,
+        // isLiked: false,
+        // isRetweeted: false
+    }])
+// tweetValues
+    // const tweetValues = 
     return (
     <TweetContext.Provider value={{ userTweets, setUserTweets }} >
         { children }
@@ -41,3 +53,6 @@ export function TweetProvider({ children }) {
 
 }
 
+export const useTweet = () => {
+    return useContext(TweetContext)
+}

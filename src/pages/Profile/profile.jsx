@@ -10,6 +10,8 @@ import Tweet from "../../components/PostComponent"
 import { useNavigate } from "react-router-dom"
 import SideBar from "../../components/homefeed/sidebar"
 import Trending from "../../components/trending"
+import { useState } from "react"
+import tweetBox from "../ComposeTweet/composeTweet"
 
 function UserDetails({cover, userProfile, name, handle, bio, link, joinedAt, following, followers}) {
   
@@ -77,10 +79,23 @@ function UserDetails({cover, userProfile, name, handle, bio, link, joinedAt, fol
 
 function Profile() {
   const navigate = useNavigate()
+  
+  const [post, setPost] = useState(false)
+
+  const handlePost = () => {
+      setPost(true)
+      // if (setPost) {
+      //   return<>
+      //     <div className="flex justify-center items-center">
+      //         <tweetBox />
+      //     </div>  </>
+      // }
+  }
+ 
     return (
         <>
         <div className="bg-neutral-1000 h-[801px] w-screen overflow-hidden inline-flex">
-           <SideBar/>
+           <SideBar onClick={handlePost}/>
             <div className=" w-[600px] h-screen overflow-y-visible overflow-x-hidden px-px inline-flex flex-col items-start border-x border-neutral-700">
                 <div className='overflow-y-auto '>
                   

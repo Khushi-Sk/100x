@@ -5,7 +5,7 @@ function getTimeofPost(postedAt) {
 
     const  now = Date.now()
 // console.log(now)
-    const timeDifference = now - postedAt
+    const timeDifference = now - Number(postedAt)
 
     const second = Math.round(timeDifference/1000)
     const minute = Math.round(second/60)

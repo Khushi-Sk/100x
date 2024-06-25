@@ -11,7 +11,7 @@ function Button({children, size='md', wh='normal', disabled=false, variant='defa
     
     // width heigth = wh
     const widthHeight = {
-      long:'w-96',
+      long:'w-[360px] w-96 ',
       medium:'w-80 h-11',
       normal: 'w-32 h-9',
       small:'w-72',

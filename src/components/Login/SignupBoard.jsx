@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom"
 export default function SignupBoard ({stepNum, w, h, header, children, navigateTo}){
 
     const width = {
-        xl: "w-[600px]",
-        lg: 'w-[512px]'
+        xl: "lg:w-[600px] md:w-[500px] w-80",
+        lg: 'lg:w-[512px] md:w-[412px] w-96'
 
 
     }
     const height = {
-        lg: "h-[650px]",
-        md: "h-[550px]"
+        lg: "lg:h-[650px] md:h-[650px] h-[650px]",
+        md: "lg:h-[550px] md:h-[550px] h-[550px]"
     }
    
-    const base = "bg-neutral-1000 inline-flex py-3 px-3 flex-col items-start gap-3 rounded-2xl "
+    const base = "bg-neutral-1000 inline-flex py-3 px-3 flex-col items-start gap-3 rounded-none md:rounded-2xl lg:rounded-2xl "
     const classes = `${width[w]} ${height[h]} ${base}`
     const navigate = useNavigate()
 

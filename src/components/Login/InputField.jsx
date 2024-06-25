@@ -26,7 +26,7 @@ function InputField({header, legend, placeholder, name, value, type, show=false,
                 <legend className="text-neutral-500 py-0 px-2  flex items-center justify-center group-focus-within:text-twitter-blue group-hover:text-twitter-blue-hover">
                     <div className="px">{legend}</div>
                 </legend>
-                <input className={classes} name={name} value={value} placeholder={placeholder} type={showPassword ?   "text": type} {...rest}  />
+                <input className={classes} name={name} value={value} placeholder={placeholder} type={showPassword ? "text": type} {...rest}  />
                 {checkMark}
                 {type === "password" && (<button onClick={visible}>
                 {showPassword ? 

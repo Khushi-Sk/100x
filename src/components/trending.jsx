@@ -34,19 +34,22 @@ function Trending() {
     </span>
     <p className="text-neutral-600 text-base font-normal leading-normal not-italic ">search </p>
   </div> */}
-        <Search />
+      <div className="hidden lg:block md:hidden sm:hidden">
+          <Search />
 
-        <div className=" bg-neutral-800 rounded-2xl">
-          <div className="py-2.5 px-4 flex items-center gap-2.5 self-stretch rounded-2xl">
-            <p className="text-neutral-50 text-2xl font-semibold  leading-normal not-italic ">What's happening</p>
+          <div className=" bg-neutral-800 rounded-2xl mt-6">
+            <div className="py-2.5 px-4 flex items-center gap-2.5 self-stretch rounded-2xl">
+              <p className="text-neutral-50 text-2xl font-semibold  leading-normal not-italic ">What's happening</p>
+            </div>
+            
+            <Topic  noOfPosts={2345} topic='indVsPak'/>
+            <Topic  noOfPosts={2563} topic='Madurai' />
+            <Topic  noOfPosts={2563} topic='IndiaWinsWorldCup' />
+
+            <div className=" p-4 flex items-start self-stretch text-twitter-blue">Show more</div>
           </div>
-          
-          <Topic  noOfPosts={2345} topic='indVsPak'/>
-          <Topic  noOfPosts={2563} topic='Madurai' />
-          <Topic  noOfPosts={2563} topic='IndiaWinsWorldCup' />
-
-          <div className=" p-4 flex items-start self-stretch text-twitter-blue">Show more</div>
-        </div>
+      </div>
+        
       {/* </div> */}
 
     </>

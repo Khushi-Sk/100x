@@ -50,7 +50,7 @@ function Login2() {
     const navigate = useNavigate()
     return (
       <>
-        <div className=" bg-100x w-screen h-screen  px-4 gap-3 flex flex-col items-start shrink-0 ">
+        <div className=" lg:bg-100x md:bg-100x bg-neutral-1000  w-screen h-screen  px-4 gap-3 flex flex-col items-start shrink-0 ">
 
             <div className="my-3 mx-4 py-24 px-3.5 inline-flex flex-col items-start gap-5 self-stretch">
                 <Form/>

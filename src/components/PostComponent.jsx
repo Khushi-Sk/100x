@@ -1,7 +1,9 @@
 
 import getTimeofPost from '../utils/timeDate.js'
-import { TweetContext } from '../context/TweetContext'
-import { useContext } from 'react';
+import { TweetContext, useTweet } from '../context/TweetContext'
+import { useContext, useEffect, useState } from 'react';
+import { URL } from '../utils/constants.js';
+import Cookies from 'universal-cookie';
 
 import Useravatar from '../assets/User avatar.png'
 import CommentLogo from "../assets/interactions/comment.png"
@@ -9,23 +11,144 @@ import LikeLogo from "../assets/interactions/heart.png"
 import liked  from "../assets/interactions/liked.png"
 import RetweetLogo from "../assets/interactions/retweet.png"
 import ShareLogo from "../assets/interactions/share.png"
+import { number } from 'prop-types';
+// import { getUser } from '../pages/ComposeTweet/composeTweet.jsx';
 
-function Tweet({
-    id, 
-    name, 
-    handle, 
+function TweetComponent({
+    id,
     tweetText, 
     postedAt,
     comments,
     likes, 
     retweets,
     views,
-    isLiked,
-    isRetweeted
+    // isLiked,
+    // isRetweeted
     }) {
     
-    const { userTweets, setUserTweets }  = useContext(TweetContext);
-    // {props.id} is missing
+    const [ user, setUser ]  = useState(null);
+    const [handle, setHandle] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeNumber, setLikeNumber] = useState(0);
+    const [isRetweeted, setIsRetweeted] = useState(false);
+    const [retweetNumber, setRetweetNumber] = useState(0);
+
+
+    const cookies = new Cookies()
+    
+
+    const getUser = async () => {   
+    const response = await fetch(`${URL.BASE_URL}/${URL.Endpoint.user}` ,{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({user_id: cookies.get("user_id")})
+    })
+    try {
+        if (response.ok) {
+            const jsonRes = await response.json()
+
+            const user_id = await jsonRes.userId
+            setUser(user_id)
+        
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+    
+// console.log(id)
+    const hitLike = async () => {
+        const response = await fetch(`${URL.BASE_URL}/${URL.Endpoint.hitLike}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({user_id: cookies.get("user_id"), post_id:id })
+        })
+                try {
+                    if (response.ok) {
+                        const jsonRes = await response.json()
+                        // console.log(jsonRes.message)
+                        if (jsonRes.message !=='Sorry, Like already exists with this user and post.') {
+                            setIsLiked(true)
+                            
+                        } else setIsLiked(false)
+                        
+                    } 
+                } catch (err) {
+                    console.log(err)
+                }
+                getLikes()
+    }
+
+    const getLikes = async () =>{
+        const postid = id
+        const numberOfLikes = await fetch(`${URL.BASE_URL}/${URL.Endpoint.numberOfLikes}/${postid}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    })
+        try{
+            const jsonRes = await numberOfLikes.json()
+            // console.log(jsonRes)
+            // console.log(id)
+            
+            const number = await jsonRes.message
+            setLikeNumber(number)
+            // console.log(likeNumber)
+            // number = likes
+
+        } catch(err) {
+            console.log(`There's an Error, ${err}`)
+        }
+
+    }
+
+    const hitRetweet = async () => {
+        const response = await fetch(`${URL.BASE_URL}/${URL.Endpoint.hitRetweet}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({user_id: cookies.get("user_id"), post_id:id })
+        })
+                try {
+                    if (response.ok) {
+                        const jsonRes = await response.json()
+                        // console.log(jsonRes.message)
+                        if (jsonRes.message !=='Sorry, Retweet already exists with this user and post.') {
+                            setIsRetweeted(true)
+                            
+                        } else setIsRetweeted(false)
+                        
+                    } 
+                } catch (err) {
+                    console.log(err)
+                }
+                getRetweets()
+    }
+
+    const getRetweets = async () =>{
+        const postid = id
+        const numberOfRetweets = await fetch(`${URL.BASE_URL}/${URL.Endpoint.numberOfRetweets}/${postid}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    })
+        try{
+            const jsonRes = await numberOfRetweets.json()
+            // console.log(jsonRes)
+            // console.log(id)
+            
+            const number = await jsonRes.message
+            setRetweetNumber(number)
+            // console.log(likeNumber)
+            // number = likes
+
+        } catch(err) {
+            console.log(`There's an Error, ${err}`)
+        }
+
+    }
+
+    useEffect( () => { getUser(), hitLike(), hitRetweet() }, []) 
+ 
+
     return (
         <>
         <div data-tweet-id={id}  className=" box-border flex h-min border-b border-neutral-700 px-4 pb-2 pt-4 w-[598.50px]"> 
@@ -39,8 +162,8 @@ function Tweet({
                     />
                 </div>
                 <div className="text-neutral-50 w-full flex flex-col items-start self-stretch gap-1 ">
-                    <span className="text-neutral-50 font-Inter text-base not-italic font-medium leading-normal">{name}
-                        <span className="text-neutral-500 font-Inter text-base not-italic font-normal leading-normal"> @{handle} <span>•</span> {getTimeofPost(postedAt)}</span>
+                    <span className="text-neutral-50 font-Inter text-base not-italic font-medium leading-normal">{user ? user.username : "Unknown User"}
+                        <span className="text-neutral-500 font-Inter text-base not-italic font-normal leading-normal"> @{user ? user.displayName : "user_1"} <span>•</span> {getTimeofPost(postedAt)}</span>
                     </span>
                     <p id="tweet content" className="text-neutral-50 font-Inter text-base not-italic leading-normal font-normal">
                         {tweetText}
@@ -53,38 +176,9 @@ function Tweet({
                             {comments}
                             </span>
                         </div>
-        
-
-                        {/* const handleLike = (tweetId) => {
-                        const updatedTweets = tweets.map((tweet) => {
-                        if (tweet.id === tweetId) {
-                            return {...tweet, likes: tweet.likes + 1}
-                            }
-                        return tweet;
-                            })
-                            setTweets(updatedTweets);      
-                        } */}
-                            <button onClick={() => {
-                     
-                                const tweets = [...userTweets]
-                                const currentTweetIndex = tweets.findIndex((tweet) => tweet.id === id)                                
-                                const updatedTweet = {
-                                    id, 
-                                    name, 
-                                    handle, 
-                                    tweetText, 
-                                    postedAt,
-                                    comments,
-                                    likes, 
-                                    retweets,
-                                    views,
-                                    isLiked: !isLiked,
-                                    isRetweeted
-                                }
-                            
-                                tweets[currentTweetIndex] = updatedTweet;
-                                setUserTweets(tweets)
-                            }} className={isLiked ? "text-[#F4245E] font-Inter text-sm not-italic leading-normal" : 
+      
+                            <button onClick={hitLike } 
+                            className={isLiked ? "text-[#F4245E] font-Inter text-sm not-italic leading-normal" : 
                             "text-neutral-500 font-Inter text-sm not-italic leading-normal" } >
                                 {!isLiked ? 
                                 
@@ -108,33 +202,14 @@ function Tweet({
                                 </g>
                               </svg> }  
 
-                            {/* <span className=" font-Inter text-sm not-italic leading-normal "> */}
-                                {isLiked ? likes +1 : likes}
-                            {/* </span> */}
+                            <span className=" font-Inter text-sm not-italic leading-normal ">
+                                {isLiked ? likeNumber : likeNumber}
+                            </span>
 
                         </button>
-                       {/* retweet  */}
-                        <button onClick={ () => {
-                            
-                            const tweets = [...userTweets]
-                            const currentTweetIndex = tweets.findIndex((tweet) => tweet.id === id)
-                            const updatedTweet = {
-                                id,
-                                name,
-                                handle,
-                                tweetText, 
-                                postedAt,
-                                comments,
-                                likes, 
-                                retweets,
-                                views,
-                                isLiked,
-                                isRetweeted: !isRetweeted
-                            }
 
-                            tweets[currentTweetIndex] = updatedTweet;
-                            setUserTweets(tweets)
-                        }} 
+                       {/* retweet  */}
+                        <button onClick={hitRetweet} 
                             className={isRetweeted ? "text-[#1FA750] font-Inter text-sm not-italic leading-normal" : 'text-neutral-500 font-Inter text-sm not-italic leading-normal'}
                         > 
                         {!isRetweeted ? (
@@ -192,7 +267,7 @@ function Tweet({
                             </g>
                         </svg> )}
                             <span className=" font-Inter text-sm not-italic leading-normal ">
-                                {isRetweeted ? retweets +1 : retweets}
+                                {isRetweeted ? retweetNumber : retweetNumber}
                             </span>
                         </button>
                         
@@ -221,4 +296,4 @@ function Tweet({
     )
 }
 
-export default Tweet
+export default TweetComponent

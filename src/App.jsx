@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { useState, useContext, Children } from "react";
 import {
     createBrowserRouter,
-    RouterProvider,
+    RouterProvider, Navigate, useNavigate
   } from "react-router-dom";
 
 
@@ -24,9 +24,14 @@ import SignupBoard from "./components/Login/InputField"
 
 import { TweetProvider } from "./context/TweetContext";
 import { UserProvider } from "./context/FormContext";
-import InputField from "./components/Login/InputField";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 
+const ProtectedRoute = ({children}) => {
+    const {authToken} = useAuth();
+    const navigate = useNavigate()
+    return authToken ? children : <Navigate to='/' />
+}
 
 const router = createBrowserRouter([
     {
@@ -51,7 +56,9 @@ const router = createBrowserRouter([
     },
     {
         path: '/homefeed',
-        element : <HomeFeed />
+        element :  (<ProtectedRoute>
+                        <HomeFeed />
+                    </ProtectedRoute>)
     },
     {
         path: '/compose-tweet',
@@ -74,12 +81,14 @@ const router = createBrowserRouter([
 
 function App() {
     return (
-        <UserProvider>
-            <TweetProvider>
-                <RouterProvider router={router} />      
-               
-            </TweetProvider> 
-        </UserProvider>
+        <AuthProvider>
+            <UserProvider>
+                <TweetProvider>
+                    <RouterProvider router={router} />      
+                </TweetProvider> 
+            </UserProvider>
+        </AuthProvider>
+        
     )
 }
 

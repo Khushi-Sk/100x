@@ -13,8 +13,8 @@ export default function SideBar({handleBg}){
                 <div>
                     {/* 100x logo */}
                     <div className="flex py-3 px-5 items-end gap-0.5 self-stretch">
-                        <img  src="../../src/assets/login/100.png" />
-                        <img  src="../../src/assets/x.png" />
+                        <img  src="../../assets/login/100.png" />
+                        <img  src="../../assets/x.png" />
                     </div>
                 
                     {/* home  */}

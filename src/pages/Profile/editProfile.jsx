@@ -1,5 +1,5 @@
 import Arrow from "../../assets/profiles/arrow-left.png"
-import ProfileCam from "../../assets/profiles/User Avatar Cam.png";
+import ProfileCam from "../../assets/profiles/User avatar cam.png";
 import Cover from "../../assets/profiles/image 17.png"
 import Camera from '../../assets/profiles/Camera.png'
 import Button from "../../components/Button";

@@ -1,3 +1,9 @@
+To Run this code in your localhost:
+1) Clone the repo
+2) Run commands in terminal like: npm install
+3) Then run command in terminal: npm run dev
+
+
 ## Objective 1: JSX Conversion
 
 ### Task Description:

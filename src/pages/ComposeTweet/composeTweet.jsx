@@ -67,7 +67,7 @@ export function Tweet() {
 
         const newTweet = {
             id:newTweetId,
-            // username: userTweets.username, 
+            username: userTweets.username, 
             // handle: userTweets.handle,
             tweetText,
         //    postedAt: timestamp,

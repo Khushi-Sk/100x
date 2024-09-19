@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import Button from "../Button"
 import UserAvatar from "../profile/Avatar"
 
+
 export default function SideBar({handleBg}){
 
     const navigate = useNavigate()
